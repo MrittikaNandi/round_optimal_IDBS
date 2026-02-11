@@ -1,6 +1,6 @@
 This repository contains the scripts accompanying the article
 
-**Round-Optimal Identity-Based Blind Signature from Lattice
+**Round-Optimal Identity-Based Blind Signature from Module Lattice
 Assumptions**
 
 # Description of files

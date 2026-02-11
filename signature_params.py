@@ -2,7 +2,7 @@
 ###
 # ###
 # Accompanying script for the paper
-# "Round-Optimal Identity-Based Blind Signature from Lattice Assumptions"
+# "Round-Optimal Identity-Based Blind Signature from Module Lattice Assumptions"
 # The script provides security estimates for the id-based blind signature construction
 # as well as estimate for the signature size
 # ###
