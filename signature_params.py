@@ -176,19 +176,12 @@ print('BKZ blocksize for commitment security as SIS:', commitment_security[1])
 
 print(' ------------------ ZK proof  area  ------------------ ' )
 
-# in the unforgeability proof, we replace h' by y1*h+y2, where y1 and y2 have
-# infinity norms tau_x, like x1 and x2.
-# the extracted one-more-isis solution is (s1+x1y1 , s2+x1*y2+x2)
-# below is its norm, which is hopefully not too large compared to beta
-#extracted_beta = sqrt(beta**2 + tau_x**4 * n_F*n_F*2*2+ tau_x**2 * n_F*2)
-
 n_zk = 128
 ve = 3 # number of norm equations
 vd = 0 # number of inf-norm equations
 norm_x_zk = sqrt(ve)*sqrt(n_zk)
 
-# norm of [s1 & x1 & x2 & s] as per Thm. 5.3 (Fig. 10), in Thm.4.2 (Fig. 6) y1||z1 -> [y1 || z1 ||x]
-# divide beta**2 by two since we commit only to the first half of (y1,y2)
+# norm of (y | x |r)
 norm_szk = sqrt( (beta_y**2) + (beta_x)**2 + (beta_r)**2 )
 #norm of the norm vector s^(e) = [y | x | r | x_zk)
 alpha_e = sqrt(norm_szk**2  + norm_x_zk**2)
