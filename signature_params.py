@@ -245,7 +245,7 @@ assert(D < D_bound)
 print('D:', D)
 param_zk = {'n_zk': 128, # ring dimension
              'n': 13, # determines SIS hardness
-             'm1': 569, #787 # m1 = len(y) + len(x) + len(r) + ve = 4.(m+dk) + 4.m + 4.1 + 3 = 569
+             'm1': 569, #787 # m1 = len(y) + len(x) + len(r) + ve = 2.(m+dk) + 2.m + 2.1 + 3 = 569
              'm2': 39, # m2 > n+{0,1,2}*(256/n_zk+1)+lambda/2+ell determines LWE hardness
              'q_zk': q_zk, # ZK modulus
              'lambda': 2, # taken from LNP22
