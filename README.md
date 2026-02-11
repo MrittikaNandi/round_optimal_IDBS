@@ -3,6 +3,12 @@ This repository contains the scripts accompanying the article
 **Round-Optimal Identity-Based Blind Signature from Lattice
 Assumptions**
 
+# Description of files
+Short description of the content:
+* MLWE_security.py, model_BKZ.py, MSIS_security.py, proba.py are MSIS/MLWE security estimator scipts borrowed from  [BDK+18]
+* signature_params.py is the main file that outputs signature size and the concrete bit securities. scripts are borowed from [AKSY22] with necessary changes
+
+The inline comments have the detailed description relating to the corresponding parameters and where they come from. 
 
 The estimates for the Zero-knowledge proof are based on
 
@@ -24,13 +30,11 @@ The parameters with necessary modifications follow from:
 
 # Requirements
 
+* Install the module 'sympy' if not already present
+```
+pip install sympy
+```
 * [Python 3] (https://www.python.org/downloads/)
-
-# Description of files
-Short description of the content:
-* MLWE_security.py, model_BKZ.py, MSIS_security.py, proba.py are MSIS/MLWE security estimator scipts borrowed from  [BDK+18]
-* signature_params.py is the main file that outputs signature size and the concrete bit securities. Please read the inline comments to understand where the figures come from. scripts are borowed from [AKSY22] with necessary changes
-
 
 # Experiments
 To compute signature sizes and security estimates run

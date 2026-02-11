@@ -6,7 +6,7 @@
 # The script provides security estimates for the id-based blind signature construction
 # as well as estimate for the signature size
 # ###
-# Security and size estimates derived from [LNP22] ***version 1***
+# Security and size estimates derived from [LNP22] 
 #(dated March 22, 2022), available at https://eprint.iacr.org/2022/
 # The script is used from [AKSY 22] available at 
 # https://gitlab.com/ElenaKirshanova/onemoresis_estimates/ with several necessary changes
@@ -89,8 +89,7 @@ print('sigma:', sigma)
 
 # keygen security, the trapdoor must look uniform
 TrapGen_LWE_security = MLWE_optimize_attack(q_s, n_s*d, n_s*d, sigma, cost_attack = LWE_primal_cost, cost_svp = svp_classical, verbose = False)
-print('TrapGen security as LWE:', TrapGen_LWE_security)
-
+print('BKZ blocksize for TrapGen security as LWE:', TrapGen_LWE_security[1])
 
 # DelTrap -> R_id
 alpha_bound = 10*sqrt(log(2*k*(1+eps**(-1)))/ pi) # lower bound on alpha 
@@ -109,7 +108,7 @@ t = 12 #15  #gaussian tailcut
 length_bound = t*s*sqrt(m*n_s)
 
 DelTrap_SIS_security = SIS_optimize_attack(q_s, n_s*m, n_s*d, length_bound, cost_attack = SIS_l2_cost, cost_svp = svp_classical, verbose = False)
-print('signing key generation as SIS :', DelTrap_SIS_security)
+print('BKZ blocksize for signing key generation as SIS :', DelTrap_SIS_security[1])
 
 
 # signature forgery decurity
@@ -123,10 +122,10 @@ s_prime = 3297 #1287 #1258 # standard deviation for SamplePre in DelTrap
 assert(s_prime > s_prime_bound)
 print('s_prime:', s_prime)
 beta_y = t*s_prime*sqrt(m_id*n_s) # l2 norm bound on signature 
-print('beta_y:', beta_y)
+print(f"beta_y: {beta_y:.2f}")
 
 sign_forgery = SIS_optimize_attack(q_s, n_s*m_id, n_s*d, beta_y, cost_attack = SIS_l2_cost, cost_svp = svp_classical, verbose = False)
-print('signature forgery as SIS:', sign_forgery)
+print('BKZ blocksize for signature forgery as SIS:', sign_forgery[1])
 
 #############################
 # message blinding
@@ -134,10 +133,10 @@ print('signature forgery as SIS:', sign_forgery)
 row = 3 #2 # no. of rows in A_1
 sigma_x = 60999 #27999 # each coefficient of x sampled with standard deviation sigma_x 
 beta_x = sigma_x*sqrt(m*n_s) # l2 norm bound on x
-print('beta_x:', beta_x)
+print(f"beta_x: {beta_x:.2f}")
 
 blinding_security = SIS_optimize_attack(q_s, n_s*m, n_s*d, beta_x, cost_attack = SIS_l2_cost, cost_svp = svp_classical, verbose = False)
-print('blinding security as SIS:', blinding_security)
+print('BKZ blocksize for blinding security as SIS:', blinding_security[1])
 
 
 ############################
@@ -155,11 +154,11 @@ dim_r = m_xr - m #dimension of of randomness r
 print("dimension of r:", dim_r)
 
 beta_r = sigma_r*sqrt(dim_r*n_s) # l2 norm bound on r
-print('beta_r:', beta_r)
+print(f"beta_r: {beta_r:.2f}")
 beta = sqrt((beta_x**2) + (beta_r**2))
 
 commitment_security = SIS_optimize_attack(q_s, n_s*m_xr, n_s*row, beta, cost_attack = SIS_l2_cost, cost_svp = svp_classical, verbose = False)
-print('commitment security as SIS:', commitment_security)
+print('BKZ blocksize for commitment security as SIS:', commitment_security[1])
 
 
 #####################
@@ -193,7 +192,7 @@ norm_x_zk = sqrt(ve)*sqrt(n_zk)
 norm_szk = sqrt( (beta_y**2) + (beta_x)**2 + (beta_r)**2 )
 #norm of the norm vector s^(e) = [y | x | r | x_zk)
 alpha_e = sqrt(norm_szk**2  + norm_x_zk**2)
-print('alpha_e:', alpha_e)
+print(f"alpha_e:{alpha_e:.2f}")
 
 gamma_e = 3 # influences the repetition factor
 t       = 1.64 # as in LNP22 Thm 5.3
@@ -209,10 +208,10 @@ lb3 = floor(Be**2+2*(max(beta1, beta2, beta3))**2)  # Thm. 5.3
 lb = max(lb1, lb2, lb3)
 
 
-print(2*sqrt(256/26)*t*gamma_e*sqrt(337))
-print('ce:', ce, 'log(Be):', log(Be,2))
+#print(2*sqrt(256/26)*t*gamma_e*sqrt(337))
+print(f"ce: {ce}, log(Be): {log(Be,2):.2f}")
 print()
-print('lb1:', log(lb1,2), 'lb2:', log(lb2,2), 'lb3:',log(lb3,2))
+print(f"lb1: {log(lb1,2):.2f}, lb2:  {log(lb2,2):.2f}, lb3: {log(lb3,2):.2f}")
 
 
 # q_zk = q_S * q1  
@@ -227,13 +226,13 @@ q_zk = q_s*q1
 assert(q_zk>=lb)
 assert(q1>=q_s)
 print('q1:', q1)
-print('log(q_zk):', log(q_zk,2), 'q_zk:', q_zk)
+print(f"log(q_zk): {log(q_zk,2):.2f}, q_zk: {q_zk}")
 
 l = 2 # number of factors of (x^128+1) mod q1
 kappa_bound = (1./(2*sqrt(l)))*(q_s)**(1./l)
 # The sigma_{-1} row of Fig 3 can be used if kappa < kappa_bound
 assert(kappa < kappa_bound)
-print('kappa bound:', kappa_bound)
+print(f"kappa bound: {kappa_bound:.2f}")
 
 #summary of all the params
 #  We are somewhat free to choose n and m2
@@ -356,12 +355,13 @@ def proof_size(paramset):
 
     sigmae = gammae*sqrt(337)*(sqrt(alphae))
     # See [LNP22] fig 10; this is an upper bound on the norm of s^(e). Note that the bound in "public information" is flawed (misplaced square roots)
-    print('proof-size log-sigmas:', log(sigma1, 2), log(sigma2, 2), log(sigmae, 2))
+    print(f"proof-size log-sigmas: {log(sigma1, 2):.2f}, {log(sigma2, 2):.2f}, {log(sigmae, 2):.2f}")
     lgq             = (log(q_zk,2))
     challnge_size   = ceil(log(2*kappa+1,2))*n_zk
     hint_size = 2.25*n*n_zk
     # p.49 of LNP22 above the paragraph "Dilithium compression" + we already have ve in m1 + we do not send t^{(d)}'s
     size_plain      = (n+ell+(256/n_zk+1)+1+lamb)*n_zk*lgq + m1*n_zk*log(4.13*sigma1,2) + m2*d*log(4.13*sigma2,2) + 256*log(4.13*sigmae,2) + challnge_size
+    # 4.13 comes from [ESLR22]
     # p.50 (top) of LNP22
     size_cut        = n*n_zk*(lgq - D)+(ell+(256/n_zk+1)+1+lamb)*n_zk*lgq + m1*n_zk*log(4.13*sigma1,2) + (m2-n)*d*log(4.13*sigma2,2)+ 256*log(4.13*sigmae,2) + challnge_size + hint_size
     return size_plain/(8*1024), size_cut/(8*1024)
@@ -369,18 +369,19 @@ def proof_size(paramset):
 
 # security
 zk_sec_SIS = SIS_security(param_zk)
-print('SIS hardness:', zk_sec_SIS)
+print('BKZ blocksize for SIS hardness:', zk_sec_SIS[1])
 zk_sec_LWE = LWE_security(param_zk)
-print('LWE hardness primal:', zk_sec_LWE)
+print('BKZ blocksize for LWE hardness primal:', zk_sec_LWE[1])
 
-
+print(' ------------------ proof and signature sizes ------------------ ' )
 # sizes
 proof = proof_size(param_zk)
-print('proof size:', proof)
+print(f"proof size non optimized: {proof[0]:.2f} KB")
+print(f"proof size with Dilithium compression: {proof[1]:.2f} KB")
 com_x_size = (n_s * row * k) / (8*1024)
 print(f"commitment size:{com_x_size:.2f} KB")
-print(f"overall non optimized:{com_x_size+proof[0]:.2f} KB")
-print(f"overall with CUT:{com_x_size+proof[1]:.2f} KB")
+print(f"overall sign size non optimized:{com_x_size+proof[0]:.2f} KB")
+print(f"overall sign size with Dilithium compression:{com_x_size+proof[1]:.2f} KB")
 
 
 # number of repetitions (rejection sampling)
